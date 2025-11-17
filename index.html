@@ -8,32 +8,31 @@
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100dvh;overflow:hidden}
   body{
-    background:url('avatar.png') center 12% / 110% no-repeat fixed;
-    /* 110%にすることで左右下を約10%ずつ見せる */
-    background-position:center 12%;
+    /* 上3%・下5%大きく → 合計8%大きく見せる */
+    background:url('avatar.png') center 12% / 118% no-repeat fixed;
   }
   #bar{
     position:fixed;
-    left:0;
-    right:0;                     /* 右側を10%伸ばすためにright:0に戻す */
+    left:-3%; right:-3%;          /* 背景の黒い部分を左右3%ずつ伸ばす */
     bottom:0;
-    height:8%;
-    min-height:46px;
+    height:7.2%;                  /* 前回の8%からさらに10%小さく */
+    min-height:42px;
     background:rgba(0,0,0,0.75);
     backdrop-filter:blur(14px);
-    border-radius:20px 20px 0 0;
+    border-radius:22px 22px 0 0;
     padding:8px 12px;
     display:flex; gap:10px; align-items:center;
     z-index:999;
   }
   input{
     flex:1; height:100%; padding:0 16px;
+    margin-left:2%;               /* テキストボックスを左に2%ずらす */
     background:rgba(255,255,255,0.25); color:white;
     border:none; border-radius:16px; font-size:16px;
   }
-  input.placeholder{color:rgba(255,255,255,0.7)}
+  input::placeholder{color:rgba(255,255,255,0.7)}
   button{
-    height:100%; padding:0 18px; font-size:17px;  /* 縦書き防止 */
+    height:100%; padding:0 18px; font-size:17px;
     background:#0068ff; color:white; border:none;
     border-radius:16px; font-weight:bold; white-space:nowrap;
   }
