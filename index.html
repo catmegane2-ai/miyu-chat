@@ -11,9 +11,12 @@
     background:url('avatar.png') center 12% / cover no-repeat fixed;
   }
   #bar{
-    position:fixed; left:5%; right:5%; bottom:0;   /* ← 横幅10%減 */
-    height:9%;                                    /* ← 縦幅を約1/3に */
-    min-height:50px;                              /* ← 小さすぎ防止 */
+    position:fixed;
+    left:0;               /* 左は0%（フル） */
+    right:10%;            /* 右だけ10%減 */
+    bottom:0;
+    height:8%;            /* 前回の9%からさらに10%減 → 約8% */
+    min-height:46px;
     background:rgba(0,0,0,0.75);
     backdrop-filter:blur(14px);
     border-radius:20px 20px 0 0;
@@ -28,16 +31,20 @@
   }
   input::placeholder{color:rgba(255,255,255,0.7)}
   button{
-    width:52px; height:100%; font-size:24px;
-    background:#ff4081; color:white; border:none;
-    border-radius:16px; cursor:pointer;
+    height:100%; padding:0 16px; font-size:17px;
+    background:#0068ff; color:white; border:none;
+    border-radius:16px; font-weight:bold;
+  }
+  #female{
+    width:56px; background:#ff4081; font-size:26px;
   }
 </style>
 </head>
 <body>
 <div id="bar">
   <input type="text" placeholder="メッセージを入力…" id="msg">
-  <button>♀</button>  <!-- ← 直感的なボタンに変更 -->
+  <button onclick="alert('送信')">送信</button>
+  <button id="female">♀</button>
 </div>
 </body>
 </html>
