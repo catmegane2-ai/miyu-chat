@@ -8,14 +8,16 @@
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100dvh;overflow:hidden}
   body{
-    background:url('avatar.png') center 12% / cover no-repeat fixed;
+    background:url('avatar.png') center 12% / 110% no-repeat fixed;
+    /* 110%にすることで左右下を約10%ずつ見せる */
+    background-position:center 12%;
   }
   #bar{
     position:fixed;
-    left:0;               /* 左は0%（フル） */
-    right:10%;            /* 右だけ10%減 */
+    left:0;
+    right:0;                     /* 右側を10%伸ばすためにright:0に戻す */
     bottom:0;
-    height:8%;            /* 前回の9%からさらに10%減 → 約8% */
+    height:8%;
     min-height:46px;
     background:rgba(0,0,0,0.75);
     backdrop-filter:blur(14px);
@@ -29,11 +31,11 @@
     background:rgba(255,255,255,0.25); color:white;
     border:none; border-radius:16px; font-size:16px;
   }
-  input::placeholder{color:rgba(255,255,255,0.7)}
+  input.placeholder{color:rgba(255,255,255,0.7)}
   button{
-    height:100%; padding:0 16px; font-size:17px;
+    height:100%; padding:0 18px; font-size:17px;  /* 縦書き防止 */
     background:#0068ff; color:white; border:none;
-    border-radius:16px; font-weight:bold;
+    border-radius:16px; font-weight:bold; white-space:nowrap;
   }
   #female{
     width:56px; background:#ff4081; font-size:26px;
