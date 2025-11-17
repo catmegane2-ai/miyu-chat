@@ -1,51 +1,45 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Miyu</title>
-<style>
-  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100dvh;overflow:hidden}
-  body{
-    /* 上3%・下5%大きく → 合計8%大きく見せる */
-    background:url('avatar.png') center 12% / 118% no-repeat fixed;
-  }
-  #bar{
-    position:fixed;
-    left:-3%; right:-3%;          /* 背景の黒い部分を左右3%ずつ伸ばす */
-    bottom:0;
-    height:7.2%;                  /* 前回の8%からさらに10%小さく */
-    min-height:42px;
-    background:rgba(0,0,0,0.75);
-    backdrop-filter:blur(14px);
-    border-radius:22px 22px 0 0;
-    padding:8px 12px;
-    display:flex; gap:10px; align-items:center;
-    z-index:999;
-  }
-  input{
-    flex:1; height:100%; padding:0 16px;
-    margin-left:2%;               /* テキストボックスを左に2%ずらす */
-    background:rgba(255,255,255,0.25); color:white;
-    border:none; border-radius:16px; font-size:16px;
-  }
-  input::placeholder{color:rgba(255,255,255,0.7)}
-  button{
-    height:100%; padding:0 18px; font-size:17px;
-    background:#0068ff; color:white; border:none;
-    border-radius:16px; font-weight:bold; white-space:nowrap;
-  }
-  #female{
-    width:56px; background:#ff4081; font-size:26px;
-  }
-</style>
-</head>
-<body>
-<div id="bar">
-  <input type="text" placeholder="メッセージを入力…" id="msg">
-  <button onclick="alert('送信')">送信</button>
-  <button id="female">♀</button>
-</div>
-</body>
-</html>
+<script>
+// ←ここに君のSuperGrok APIキーを入れる（x.ai/consoleで取得）
+const API_KEY = "xai-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+
+function send() {
+  const input = document.getElementById("msg");
+  const text = input.value.trim();
+  if (!text) return;
+
+  // ユーザーの発言をすぐ表示
+  addMessage("You", text);
+  input.value = "";
+
+  fetch("https://api.x.ai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + API_KEY,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "grok-4",
+      messages: [{ role: "user", content: text }],
+      temperature: 0.7
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    const reply = data.choices[0].message.content;
+    addMessage("Miyu", reply);
+  })
+  .catch(err => {
+    addMessage("Error", "通信エラーです");
+    console.error(err);
+  });
+}
+
+// チャットログを画面に追加する関数（これだけ今は必要）
+function addMessage(sender, text) {
+  const div = document.createElement("div");
+  div.textContent = sender + ": " + text;
+  div.style.cssText = "margin:8px 12px;padding:10px;background:rgba(255,255,255,0.15);border-radius:12px;color:white;";
+  document.getElementById("chatlog").appendChild(div);
+  div.scrollIntoView({behavior:"smooth"});
+}
+</script>
