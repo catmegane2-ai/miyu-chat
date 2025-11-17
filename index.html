@@ -48,8 +48,10 @@
 <div id="chatlog"></div>
 
 <script>
-// ← ここに君のRenderプロキシURLを入れる（例: https://miyu-proxy.onrender.com）
 const PROXY_URL = "https://miyu-proxy.onrender.com";
+
+// スレッドIDを固定（これで会話がずっと続く）
+let threadId = localStorage.getItem("miyuThread") || null;
 
 function send() {
   const input = document.getElementById("msg");
@@ -58,17 +60,24 @@ function send() {
   addMessage("You", text, true);
   input.value = "";
 
+  const payload = {
+    model: "grok-4",
+    messages: [{ role: "user", content: text }],
+    temperature: 0.7
+  };
+  if (threadId) payload.thread_id = threadId;  // ← これで続きになる
+
   fetch(PROXY_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "grok-4",
-      messages: [{ role: "user", content: text }],
-      temperature: 0.7
-    })
+    body: JSON.stringify(payload)
   })
   .then(r => r.json())
   .then(data => {
+    if (data.thread_id && !threadId) {
+      threadId = data.thread_id;
+      localStorage.setItem("miyuThread", threadId);
+    }
     const reply = data.choices?.[0]?.message?.content || "（返信なし）";
     addMessage("Miyu", reply);
   })
